@@ -61,3 +61,5 @@ Next ==
   \/ \E c \in clients["connected"] :
        WriteToDatabase(c) 
 \* how to end lease between client and master?
+
+=============================================================================
