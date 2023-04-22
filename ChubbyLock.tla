@@ -22,12 +22,10 @@ Init ==
 
 HandleMasterFail ==
     /\ \/ /\ masterConnected = TRUE
-          /\ \E c \in clients["connected"] : clients' = [connected |-> {},
-                                                         waiting |-> clients["waiting"] \union {c},
-                                                         idle |-> clients["idle"]]
+          /\ \E c \in clients["connected"] : clients' = [clients EXCEPT !["connected"] = {}, !["waiting"] = @ \cup {c}]
        \/ /\ masterConnected = FALSE
           /\ UNCHANGED clients
-    /\ \E r \in chubbyCell["replica"] : chubbyCell' = [master |-> {r}, replica |-> Server \ {r}] \* TODO: just remove server
+    /\ \E r \in chubbyCell["replica"] : chubbyCell' = [chubbyCell EXCEPT !["master"] = {r}, !["replica"] = @ \ {r}]
     /\ masterConnected' = FALSE
     /\ UNCHANGED databases
 
@@ -41,7 +39,7 @@ SendKeepAliveCall(c) ==
           /\ UNCHANGED <<clients, masterConnected>>
        \/ /\ masterConnected = FALSE
           /\ c \in clients["waiting"]
-          /\ clients' = [connected |-> {c}, waiting |-> clients["waiting"] \ {c}, idle |-> clients["idle"]]
+          /\ clients' = [clients EXCEPT !["connected"] = {c}, !["waiting"] = @ \ {c}]
           /\ masterConnected' = TRUE
     /\ UNCHANGED <<chubbyCell, databases>>
 
@@ -49,22 +47,18 @@ WriteToDatabase(c) ==
     /\ masterConnected = TRUE
     /\ c \in clients["connected"]
     /\ LET d == CHOOSE d \in Data : TRUE IN
-       \E m \in chubbyCell["master"]: databases' = [databases EXCEPT ![m] = databases[m] \union {d}]
+       \E m \in chubbyCell["master"]: databases' = [databases EXCEPT ![m] = databases[m] \cup {d}]
     /\ UNCHANGED <<chubbyCell, clients, masterConnected>>
 
 EndLeaseToClient ==
     /\ masterConnected = TRUE
-    /\ \E c \in clients["connected"] : clients' = [connected |-> {},
-                                                   waiting |-> clients["waiting"],
-                                                   idle |-> clients["idle"] \union {c}]
+    /\ \E c \in clients["connected"] : clients' = [clients EXCEPT !["connected"] = {}, !["idle"] = @ \cup {c}]
     /\ masterConnected' = FALSE
     /\ UNCHANGED <<chubbyCell, databases>>
 
 GiveLeaseToClient ==
     /\ masterConnected = FALSE
-    /\ \E c \in clients["waiting"] : clients' = [connected |-> {c},
-                                                 waiting |-> clients["waiting"] \ {c},
-                                                 idle |-> clients["idle"]]
+    /\ \E c \in clients["waiting"] : clients' = [clients EXCEPT !["connected"] = {c}, !["waiting"] = @ \ {c}]
     /\ masterConnected' = TRUE
     /\ UNCHANGED <<chubbyCell, databases>>
 
@@ -86,4 +80,8 @@ OnlyOneConnection ==
 databaseSize ==
     \A s \in Server : Cardinality(databases[s]) <= 3
 
+
+CONSTANTS
+r1, r2, r3, r4, r5, c1, c2, d1, d2, d3
+symm == Permutations({r1, r2, r3, r4, r5}) \cup Permutations({c1, c2}) \cup Permutations({d1, d2, d3})
 =============================================================================
