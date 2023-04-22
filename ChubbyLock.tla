@@ -27,13 +27,13 @@ HandleMasterFail ==
                                                          idle |-> clients["idle"]]
        \/ /\ masterConnected = FALSE
           /\ UNCHANGED clients
-    /\ \E r \in chubbyCell["replicas"] : chubbyCell' = [master |-> {r}, replica |-> Server \ {r}] \* TODO: just remove server
+    /\ \E r \in chubbyCell["replica"] : chubbyCell' = [master |-> {r}, replica |-> Server \ {r}] \* TODO: just remove server
     /\ masterConnected' = FALSE
     /\ UNCHANGED databases
 
 SyncMasterDatabaseToReplicas ==
     /\ masterConnected = FALSE
-    /\ databases' = [s \in Server |-> databases["master"]]
+    /\ \E m \in chubbyCell["master"] : databases' = [s \in Server |-> databases[m]]
     /\ UNCHANGED <<chubbyCell, clients, masterConnected>>
 
 SendKeepAliveCall(c) ==
@@ -49,7 +49,7 @@ WriteToDatabase(c) ==
     /\ masterConnected = TRUE
     /\ c \in clients["connected"]
     /\ LET d == CHOOSE d \in Data : TRUE IN
-       databases' = [databases EXCEPT !["master"] = databases["master"] \union {d}]
+       \E m \in chubbyCell["master"]: databases' = [databases EXCEPT ![m] = databases[m] \union {d}]
     /\ UNCHANGED <<chubbyCell, clients, masterConnected>>
 
 EndLeaseToClient ==
@@ -76,9 +76,9 @@ Next ==
   \/ GiveLeaseToClient
 
 OnlyOneConnection ==
-    /\ Cardinality(chubbyCell["master"]) = 1
+    /\ Cardinality(chubbyCell["master"]) <= 1
     /\ chubbyCell["master"] \intersect chubbyCell["replica"] = {}
-    /\ Cardinality(chubbyCell["connected"]) = 1
+    /\ Cardinality(clients["connected"]) <= 1
     /\ clients["connected"] \intersect clients["waiting"] \intersect clients["idle"] = {}
 
 -----------------------------------------------------------------------------
