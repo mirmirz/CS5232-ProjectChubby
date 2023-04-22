@@ -1,65 +1,89 @@
 --------------------- MODULE ChubbyLock ---------------------
+EXTENDS TLC, Integers, Sequences, FiniteSets
+CONSTANT Server, Client, Data
 
-EXTENDS TLC 
+VARIABLES chubbyCell, clients, databases, masterConnected
 
-CONSTANT ChubbyCell, Client
-
-ServerRoles == {"master", "replica"}
+ServerRole == {"master", "replica"}
 ClientStatus == {"connected", "idle", "waiting"}
 
-VARIABLES
-  servers,
-  clients,
-  serverState,       \* The state of the transaction manager.
-  masterState,    \* The set of RMs from which the TM has received "Prepared"
-
-
-\* DatabaseData ==		\* available data to add to the database 
-\* [“data1”, “data2”, “data3”, “data4”, “data5”] 
-   
-TypeOK ==  
-  (*************************************************************************)
-  (* The type-correctness invariant                                        *)
-  (*************************************************************************)
-  /\ servers \in [ServerRoles -> SUBSET ChubbyCell]
+TypeOK ==
+  /\ chubbyCell \in [ServerRole -> SUBSET Server]
   /\ clients \in [ClientStatus -> SUBSET Client]
-  /\ serverState \in [ChubbyCell -> {"online", "offline"}]
-  /\ masterState \in {"locked", "unlocked"}
+  /\ \A s \in Server: \A d \in databases[s]: d \in Data
+  /\ masterConnected \in BOOLEAN
 
-Init ==   
-  (*************************************************************************)
-  (* The initial predicate.                                                *)
-  (*************************************************************************)
-  /\ servers  = [master |-> {r1}, replica |-> ChubbyCell \ {r1}] \* r1 server is initial Master server
-  /\ clients \in [connected |-> {}, waiting |-> {}, idle |-> Client]   \* no client connected initially
-  /\ serverState = [r \in ChubbyCell |-> "online"]  \* All servers online
-  /\ masterState = "unlocked"   \* master initally unlocked
+Init ==
+  LET m == CHOOSE s \in Server : TRUE IN
+  /\ chubbyCell = [master |-> {m}, replica |-> Server \ {m}]
+  /\ clients = [connected |-> {}, waiting |-> {}, idle |-> Client]
+  /\ databases = [s \in Server |-> {}]
+  /\ masterConnected = FALSE
 
-\* Master states
-MasterFail(r) == FALSE \* TODO: Define me!
-GiveLeasetoClient(r) == FALSE \* TODO: Define me! \* can generate key to give client like Rooms.tla
-SyncDatabaseToReplicas(r) == FALSE \* TODO: Define me!
+HandleMasterFail ==
+    /\ \/ /\ masterConnected = TRUE
+          /\ \E c \in clients["connected"] : clients' = [connected |-> {},
+                                                         waiting |-> clients["waiting"] \union {c},
+                                                         idle |-> clients["idle"]]
+       \/ /\ masterConnected = FALSE
+          /\ UNCHANGED clients
+    /\ \E r \in chubbyCell["replicas"] : chubbyCell' = [master |-> {r}, replica |-> Server \ {r}] \* TODO: just remove server
+    /\ masterConnected' = FALSE
+    /\ UNCHANGED databases
 
-\* Replica states
-ReplicaFail(r) == FALSE \* TODO: Define me!
-RestartFailServer(r) == FALSE \* TODO: Define me!
+SyncMasterDatabaseToReplicas ==
+    /\ masterConnected = FALSE
+    /\ databases' = [s \in Server |-> databases["master"]]
+    /\ UNCHANGED <<chubbyCell, clients, masterConnected>>
 
-ElectNewMaster == FALSE \* TODO: Define me!
+SendKeepAliveCall(c) ==
+    /\ \/ /\ masterConnected = TRUE
+          /\ UNCHANGED <<clients, masterConnected>>
+       \/ /\ masterConnected = FALSE
+          /\ c \in clients["waiting"]
+          /\ clients' = [connected |-> {c}, waiting |-> clients["waiting"] \ {c}, idle |-> clients["idle"]]
+          /\ masterConnected' = TRUE
+    /\ UNCHANGED <<chubbyCell, databases>>
 
-\* Client states
-SendKeepAliveCall(c) == FALSE \* TODO: Define me!
-WriteToDatabase(c) == FALSE \* TODO: Define me!
+WriteToDatabase(c) ==
+    /\ masterConnected = TRUE
+    /\ c \in clients["connected"]
+    /\ LET d == CHOOSE d \in Data : TRUE IN
+       databases' = [databases EXCEPT !["master"] = databases["master"] \union {d}]
+    /\ UNCHANGED <<chubbyCell, clients, masterConnected>>
+
+EndLeaseToClient ==
+    /\ masterConnected = TRUE
+    /\ \E c \in clients["connected"] : clients' = [connected |-> {},
+                                                   waiting |-> clients["waiting"],
+                                                   idle |-> clients["idle"] \union {c}]
+    /\ masterConnected' = FALSE
+    /\ UNCHANGED <<chubbyCell, databases>>
+
+GiveLeaseToClient ==
+    /\ masterConnected = FALSE
+    /\ \E c \in clients["waiting"] : clients' = [connected |-> {c},
+                                                 waiting |-> clients["waiting"] \ {c},
+                                                 idle |-> clients["idle"]]
+    /\ masterConnected' = TRUE
+    /\ UNCHANGED <<chubbyCell, databases>>
 
 Next ==
-  \/ \E r \in servers["master"] :
-       MasterFail(r) \/ GiveLeasetoClient(r) \/ SyncDatabaseToReplicas(r)
-  \/ \E r \in servers["replica"] :
-       ReplicaFail(r) \/ RestartFailServer(r)
-  \/ ElectNewMaster
-  \/ \E c \in clients["idle"] :
-       SendKeepAliveCall(c)
-  \/ \E c \in clients["connected"] :
-       WriteToDatabase(c) 
-\* how to end lease between client and master?
+  \/ HandleMasterFail
+  \/ SyncMasterDatabaseToReplicas
+  \/ \E c \in Client: SendKeepAliveCall(c) \/ WriteToDatabase(c)
+  \/ EndLeaseToClient
+  \/ GiveLeaseToClient
+
+OnlyOneConnection ==
+    /\ Cardinality(chubbyCell["master"]) = 1
+    /\ chubbyCell["master"] \intersect chubbyCell["replica"] = {}
+    /\ Cardinality(chubbyCell["connected"]) = 1
+    /\ clients["connected"] \intersect clients["waiting"] \intersect clients["idle"] = {}
+
+-----------------------------------------------------------------------------
+
+databaseSize ==
+    \A s \in Server : Cardinality(databases[s]) <= 3
 
 =============================================================================

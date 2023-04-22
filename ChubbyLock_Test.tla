@@ -5,19 +5,11 @@ EXTENDS TLC
 CONSTANT Client, Resources
 
 VARIABLES
-  currentClient,      
-  requestQueue,       
-  lockState,          
+  currentClient,
+  requestQueue, //clients who want to connect to server
+  lockState, //lock / unlock database of server      
   master,             
   replicas        
-
-Init ==
-  /\ currentClient = NULL
-  /\ requestQueue = <<>>
-  /\ lockState = [r \in Resources |-> "unlocked"]
-  /\ master \in replicas
-  /\ replicas # {}
-  /\ \A node \in replicas: node # master    
 
 Init ==
   /\ currentClient = NULL
