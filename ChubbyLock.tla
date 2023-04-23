@@ -36,10 +36,10 @@ Init ==
   (* The initial predicate.                                                *)
   (*************************************************************************)
     LET m == CHOOSE s \in Server : TRUE IN
-    /\ chubbyCell = [master |-> {m}, replica |-> Server \ {m}]
-    /\ clients = [connected |-> {}, waiting |-> {}, idle |-> Client]
-    /\ databases = [s \in Server |-> {}]
-    /\ masterConnected = FALSE
+    /\ chubbyCell = [master |-> {m}, replica |-> Server \ {m}] \* randomly select server to be a master
+    /\ clients = [connected |-> {}, waiting |-> {}, idle |-> Client] \* Clients are all in idle state
+    /\ databases = [s \in Server |-> {}] \*  All database in the server starts off empty
+    /\ masterConnected = FALSE  \* Sets Master state to unlocked
 -----------------------------------------------------------------------------
 (***************************************************************************)
 (* States / actions in a Chubby Lock Service                               *)
