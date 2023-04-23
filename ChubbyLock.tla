@@ -69,7 +69,7 @@ SyncMasterDatabaseToReplicas ==
     /\ \E m \in chubbyCell["master"] : databases' = [s \in Server |-> databases[m]]
     /\ UNCHANGED <<chubbyCell, clients, masterConnected>>
 
-SendRequestToConnect(c) ==
+SendKeepAliveCall(c) ==
   (*************************************************************************)
   (* Actions performed by client attempting to connect to master:          *)
   (*    - clients from Idle will be placed in a waiting queue              *)
@@ -77,17 +77,6 @@ SendRequestToConnect(c) ==
     /\ c \in clients["idle"]
     /\ clients' = [clients EXCEPT !["waiting"] = @ \cup {c}, !["idle"] = @ \ {c}]
     /\ UNCHANGED <<chubbyCell, databases, masterConnected>>
-
-SendKeepAliveCall(c) ==
-  (*************************************************************************)
-  (* Actions performed by client sending a keepAlive call to master:       *)
-  (*    - client from waiting will be connected master                     *)
-  (*************************************************************************)
-    /\ masterConnected = FALSE
-    /\ c \in clients["waiting"]
-    /\ clients' = [clients EXCEPT !["connected"] = {c}, !["waiting"] = @ \ {c}]
-    /\ masterConnected' = TRUE
-    /\ UNCHANGED <<chubbyCell, databases>>
 
 WriteToDatabase(c) ==
   (*************************************************************************)
@@ -126,7 +115,7 @@ GiveLeaseToClient ==
 Next ==
     \/ HandleMasterFail
     \/ SyncMasterDatabaseToReplicas
-    \/ \E c \in Client: SendRequestToConnect(c) \/ SendKeepAliveCall(c) \/ WriteToDatabase(c)
+    \/ \E c \in Client: SendKeepAliveCall(c) \/ WriteToDatabase(c)
     \/ EndLeaseToClient
     \/ GiveLeaseToClient
 
