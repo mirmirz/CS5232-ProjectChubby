@@ -121,11 +121,11 @@ Next ==
     \/ GiveLeaseToClient
 
 OnlyOneConnection ==
-    /\ Cardinality(chubbyCell["master"]) = 1
   (*************************************************************************)
   (* Invariant that ensure only 1 connection between master-client can     *)
   (* be established at a time                                              *)
   (*************************************************************************)
+    /\ Cardinality(chubbyCell["master"]) = 1
     /\ chubbyCell["master"] \intersect chubbyCell["replica"] = {}
     /\ Cardinality(clients["connected"]) <= 1
     /\ clients["connected"] \intersect clients["waiting"] \intersect clients["idle"] = {}
