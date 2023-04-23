@@ -8,17 +8,17 @@ ServerRole == {"master", "replica"}
 ClientStatus == {"connected", "idle", "waiting"}
 
 TypeOK ==
-  /\ chubbyCell \in [ServerRole -> SUBSET Server]
-  /\ clients \in [ClientStatus -> SUBSET Client]
-  /\ \A s \in Server: \A d \in databases[s]: d \in Data
-  /\ masterConnected \in BOOLEAN
+    /\ chubbyCell \in [ServerRole -> SUBSET Server]
+    /\ clients \in [ClientStatus -> SUBSET Client]
+    /\ \A s \in Server: \A d \in databases[s]: d \in Data
+    /\ masterConnected \in BOOLEAN
 
 Init ==
-  LET m == CHOOSE s \in Server : TRUE IN
-  /\ chubbyCell = [master |-> {m}, replica |-> Server \ {m}]
-  /\ clients = [connected |-> {}, waiting |-> {}, idle |-> Client]
-  /\ databases = [s \in Server |-> {}]
-  /\ masterConnected = FALSE
+    LET m == CHOOSE s \in Server : TRUE IN
+    /\ chubbyCell = [master |-> {m}, replica |-> Server \ {m}]
+    /\ clients = [connected |-> {}, waiting |-> {}, idle |-> Client]
+    /\ databases = [s \in Server |-> {}]
+    /\ masterConnected = FALSE
 
 HandleMasterFail ==
     /\ \/ /\ masterConnected = TRUE
@@ -34,13 +34,16 @@ SyncMasterDatabaseToReplicas ==
     /\ \E m \in chubbyCell["master"] : databases' = [s \in Server |-> databases[m]]
     /\ UNCHANGED <<chubbyCell, clients, masterConnected>>
 
+SendRequestToConnect(c) ==
+    /\ c \in clients["idle"]
+    /\ clients' = [clients EXCEPT !["waiting"] = @ \cup {c}, !["idle"] = @ \ {c}]
+    /\ UNCHANGED <<chubbyCell, databases, masterConnected>>
+
 SendKeepAliveCall(c) ==
-    /\ \/ /\ masterConnected = TRUE
-          /\ UNCHANGED <<clients, masterConnected>>
-       \/ /\ masterConnected = FALSE
-          /\ c \in clients["waiting"]
-          /\ clients' = [clients EXCEPT !["connected"] = {c}, !["waiting"] = @ \ {c}]
-          /\ masterConnected' = TRUE
+    /\ masterConnected = FALSE
+    /\ c \in clients["waiting"]
+    /\ clients' = [clients EXCEPT !["connected"] = {c}, !["waiting"] = @ \ {c}]
+    /\ masterConnected' = TRUE
     /\ UNCHANGED <<chubbyCell, databases>>
 
 WriteToDatabase(c) ==
@@ -63,11 +66,11 @@ GiveLeaseToClient ==
     /\ UNCHANGED <<chubbyCell, databases>>
 
 Next ==
-  \/ HandleMasterFail
-  \/ SyncMasterDatabaseToReplicas
-  \/ \E c \in Client: SendKeepAliveCall(c) \/ WriteToDatabase(c)
-  \/ EndLeaseToClient
-  \/ GiveLeaseToClient
+    \/ HandleMasterFail
+    \/ SyncMasterDatabaseToReplicas
+    \/ \E c \in Client: SendRequestToConnect(c) \/ SendKeepAliveCall(c) \/ WriteToDatabase(c)
+    \/ EndLeaseToClient
+    \/ GiveLeaseToClient
 
 OnlyOneConnection ==
     /\ Cardinality(chubbyCell["master"]) <= 1
@@ -79,7 +82,6 @@ OnlyOneConnection ==
 
 databaseSize ==
     \A s \in Server : Cardinality(databases[s]) <= 3
-
 
 CONSTANTS
 r1, r2, r3, r4, r5, c1, c2, d1, d2, d3
