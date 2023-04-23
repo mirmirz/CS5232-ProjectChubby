@@ -2,18 +2,251 @@
 TLC2 Version 2.16 of 31 December 2020 (rev: cdddf55)
 @!@!@ENDMSG 2262 @!@!@
 @!@!@STARTMSG 2187:0 @!@!@
-Running breadth-first search Model-Checking with fp 124 and seed -6697501228039482374 with 1 worker on 10 cores with 3641MB heap and 64MB offheap memory [pid: 42532] (Mac OS X 13.3.1 aarch64, Oracle Corporation 20 x86_64, MSBDiskFPSet, DiskStateQueue).
+Running breadth-first search Model-Checking with fp 11 and seed 735639434318744142 with 1 worker on 10 cores with 3641MB heap and 64MB offheap memory [pid: 8135] (Mac OS X 13.3.1 aarch64, Oracle Corporation 20 x86_64, MSBDiskFPSet, DiskStateQueue).
 @!@!@ENDMSG 2187 @!@!@
-@!@!@STARTMSG 1000:1 @!@!@
-TLC threw an unexpected exception.
-This was probably caused by an error in the spec or model.
-See the User Output or TLC Console for clues to what happened.
-The exception was a tlc2.tool.ConfigFileException
-: @!@!@STARTMSG 5006:0 @!@!@
-TLC found an error in the configuration file at line 5
-It was expecting = or <-, but did not find it.
-@!@!@ENDMSG 5006 @!@!@
-@!@!@ENDMSG 1000 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file /Users/amiraziz/Documents/CS5232 PROJ/CS5232-ProjectChubby/ChubbyLock.tla
+Parsing file /private/var/folders/56/ywb0rq4x0s98_vgb72zq4z5h0000gn/T/TLC.tla
+Parsing file /private/var/folders/56/ywb0rq4x0s98_vgb72zq4z5h0000gn/T/Integers.tla
+Parsing file /private/var/folders/56/ywb0rq4x0s98_vgb72zq4z5h0000gn/T/Sequences.tla
+Parsing file /private/var/folders/56/ywb0rq4x0s98_vgb72zq4z5h0000gn/T/FiniteSets.tla
+Parsing file /private/var/folders/56/ywb0rq4x0s98_vgb72zq4z5h0000gn/T/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module Integers
+Semantic processing of module ChubbyLock
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2023-04-23 19:46:10)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 1 distinct state generated at 2023-04-23 19:46:11.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 2193:0 @!@!@
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 5.1E-15
+@!@!@ENDMSG 2193 @!@!@
+@!@!@STARTMSG 2201:0 @!@!@
+The coverage statistics at 2023-04-23 19:46:11
+@!@!@ENDMSG 2201 @!@!@
+@!@!@STARTMSG 2773:0 @!@!@
+<Init line 34, col 1 to line 34, col 4 of module ChubbyLock>: 1:1
+@!@!@ENDMSG 2773 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 39, col 5 to line 42, col 30 of module ChubbyLock: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<HandleMasterFail line 48, col 1 to line 48, col 16 of module ChubbyLock>: 34:250
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 54, col 14 to line 54, col 35 of module ChubbyLock: 218
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 54, col 14 to line 54, col 28 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 54, col 32 to line 54, col 35 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 55, col 46 to line 55, col 119 of module ChubbyLock: 48
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 55, col 57 to line 55, col 119 of module ChubbyLock: 68
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 55, col 23 to line 55, col 42 of module ChubbyLock: 68
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 56, col 14 to line 56, col 36 of module ChubbyLock: 242
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 56, col 14 to line 56, col 28 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 56, col 32 to line 56, col 36 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 57, col 14 to line 57, col 30 of module ChubbyLock: 72
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 58, col 41 to line 58, col 115 of module ChubbyLock: 250
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 58, col 17 to line 58, col 37 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 59, col 8 to line 59, col 31 of module ChubbyLock: 250
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 60, col 8 to line 60, col 26 of module ChubbyLock: 250
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<SyncMasterDatabaseToReplicas line 62, col 1 to line 62, col 28 of module ChubbyLock>: 10:102
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 68, col 8 to line 68, col 30 of module ChubbyLock: 272
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 68, col 8 to line 68, col 22 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 68, col 26 to line 68, col 30 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 8 to line 69, col 83 of module ChubbyLock: 102
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 70, col 8 to line 70, col 57 of module ChubbyLock: 102
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<SendKeepAliveCall line 72, col 1 to line 72, col 20 of module ChubbyLock>: 29:136
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 77, col 8 to line 77, col 28 of module ChubbyLock: 476
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 77, col 8 to line 77, col 8 of module ChubbyLock: 340
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 77, col 14 to line 77, col 28 of module ChubbyLock: 340
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 78, col 8 to line 78, col 81 of module ChubbyLock: 136
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 79, col 8 to line 79, col 59 of module ChubbyLock: 136
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<WriteToDatabase line 92, col 1 to line 92, col 18 of module ChubbyLock>: 28:68
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 98, col 8 to line 98, col 29 of module ChubbyLock: 408
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 98, col 8 to line 98, col 22 of module ChubbyLock: 340
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 98, col 26 to line 98, col 29 of module ChubbyLock: 340
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 99, col 8 to line 99, col 33 of module ChubbyLock: 204
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 99, col 8 to line 99, col 8 of module ChubbyLock: 136
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 99, col 14 to line 99, col 33 of module ChubbyLock: 136
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 101, col 8 to line 101, col 98 of module ChubbyLock: 68
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 102, col 8 to line 102, col 57 of module ChubbyLock: 68
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<EndLeaseToClient line 104, col 1 to line 104, col 16 of module ChubbyLock>: 28:68
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 110, col 8 to line 110, col 29 of module ChubbyLock: 238
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 110, col 8 to line 110, col 22 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 110, col 26 to line 110, col 29 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 111, col 8 to line 111, col 110 of module ChubbyLock: 68
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 112, col 8 to line 112, col 31 of module ChubbyLock: 68
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 113, col 8 to line 113, col 42 of module ChubbyLock: 68
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<GiveLeaseToClient line 115, col 1 to line 115, col 17 of module ChubbyLock>: 40:102
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 121, col 8 to line 121, col 30 of module ChubbyLock: 238
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 121, col 8 to line 121, col 22 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 121, col 26 to line 121, col 30 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 122, col 8 to line 122, col 109 of module ChubbyLock: 102
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 123, col 8 to line 123, col 30 of module ChubbyLock: 102
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 124, col 8 to line 124, col 42 of module ChubbyLock: 102
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<TypeOK line 25, col 1 to line 25, col 6 of module ChubbyLock>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 29, col 5 to line 32, col 34 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 29, col 8 to line 29, col 51 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 30, col 8 to line 30, col 50 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 31, col 8 to line 31, col 57 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 31, col 25 to line 31, col 57 of module ChubbyLock: 850
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 31, col 48 to line 31, col 57 of module ChubbyLock: 375
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 31, col 34 to line 31, col 45 of module ChubbyLock: 850
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 31, col 17 to line 31, col 22 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 32, col 8 to line 32, col 34 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<OnlyOneConnection line 133, col 1 to line 133, col 17 of module ChubbyLock>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 138, col 5 to line 141, col 89 of module ChubbyLock: 170
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2202:0 @!@!@
+End of statistics.
+@!@!@ENDMSG 2202 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(17) at 2023-04-23 19:46:11: 727 states generated (56,796 s/min), 170 distinct states found (13,281 ds/min), 0 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+727 states generated, 170 distinct states found, 0 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2194:0 @!@!@
+The depth of the complete state graph search is 17.
+@!@!@ENDMSG 2194 @!@!@
+@!@!@STARTMSG 2268:0 @!@!@
+The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 2 and the 95th percentile is 2).
+@!@!@ENDMSG 2268 @!@!@
 @!@!@STARTMSG 2186:0 @!@!@
-Finished in 148ms at (2023-04-22 06:56:10)
+Finished in 770ms at (2023-04-23 19:46:11)
 @!@!@ENDMSG 2186 @!@!@
