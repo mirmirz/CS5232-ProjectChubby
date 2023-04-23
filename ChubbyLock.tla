@@ -25,7 +25,8 @@ HandleMasterFail ==
           /\ \E c \in clients["connected"] : clients' = [clients EXCEPT !["connected"] = {}, !["waiting"] = @ \cup {c}]
        \/ /\ masterConnected = FALSE
           /\ UNCHANGED clients
-    /\ \E r \in chubbyCell["replica"] : chubbyCell' = [chubbyCell EXCEPT !["master"] = {r}, !["replica"] = @ \ {r}]
+    /\ \E m \in chubbyCell["master"]: \E r \in chubbyCell["replica"] :
+        chubbyCell' = [chubbyCell EXCEPT !["master"] = {r}, !["replica"] = (@ \cup {m}) \ {r}]
     /\ masterConnected' = FALSE
     /\ UNCHANGED databases
 
@@ -73,7 +74,7 @@ Next ==
     \/ GiveLeaseToClient
 
 OnlyOneConnection ==
-    /\ Cardinality(chubbyCell["master"]) <= 1
+    /\ Cardinality(chubbyCell["master"]) = 1
     /\ chubbyCell["master"] \intersect chubbyCell["replica"] = {}
     /\ Cardinality(clients["connected"]) <= 1
     /\ clients["connected"] \intersect clients["waiting"] \intersect clients["idle"] = {}
